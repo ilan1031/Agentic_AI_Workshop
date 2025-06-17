@@ -1,0 +1,14 @@
+[
+  {
+    "TxnID": "T2001",
+    "Date": "2025-02-15",
+    "Description": "Refund",
+    "Amount": -200
+  },
+  {
+    "TxnID": "T2002",
+    "Date": "2025-02-20",
+    "Description": "Service",
+    "Amount": 2500
+  }
+]

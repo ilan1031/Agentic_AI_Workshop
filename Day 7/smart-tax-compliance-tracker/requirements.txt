@@ -1,0 +1,14 @@
+streamlit
+langchain
+langgraph
+crewai
+pyautogen
+faiss-cpu
+chromadb
+sentence-transformers
+PyPDF2
+python-docx
+openpyxl
+icalendar
+python-dotenv
+google-generativeai

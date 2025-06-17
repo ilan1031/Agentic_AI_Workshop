@@ -1,0 +1,7 @@
+backend/data/transactions\transactions_jan.csv
+backend/data/invoices\invoice2.csv
+backend/data/ledgers\ledger2025.xlsx
+backend/data/regulations\tds_update_2025.txt
+backend/data/invoices\invoice1.pdf
+backend/data/regulations\gst_rules_2025.pdf
+backend/data/transactions\transactions_feb.json
