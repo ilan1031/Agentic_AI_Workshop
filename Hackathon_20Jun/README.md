@@ -379,8 +379,6 @@ def find_similar_invoices(transaction):
    ```
 
 This complete system provides an AI-powered reconciliation engine with seamless integration between all components. The visual interface allows finance teams to easily upload bank feeds, monitor AI processing, and review reconciliation results with audit trails.
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
