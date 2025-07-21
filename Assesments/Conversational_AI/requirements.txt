@@ -1,0 +1,6 @@
+streamlit
+langchain
+langgraph
+python-dotenv
+requests
+google-generativeai
