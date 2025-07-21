@@ -1,110 +1,112 @@
 import streamlit as st
 from crewai import Agent, Task, Crew, Process, LLM
-# from langchain_community.llms import Groq
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 import ast
 from dotenv import load_dotenv
 
+# ===== Load Environment Variables =====
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# ===== 100% ONNX-FREE SOLUTION =====
-# No chromadb, no CodeInterpreterTool, no ONNX runtime
-
-
-# Custom Python Analyzer (No ONNX)
+# ===== Static Code Analyzer (AST) =====
 def analyze_python_code(code: str) -> str:
-    """Static analysis without executing code."""
+    """Perform static analysis using AST without executing code."""
     try:
-        # 1. Check syntax via AST
         tree = ast.parse(code)
-        
-        # 2. Basic checks
         issues = []
-        
-        # Check for print statements (not recommended in production)
-        if any(isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == 'print' 
-               for node in ast.walk(tree)):
+
+        # Check for print() usage
+        if any(isinstance(node, ast.Call) and getattr(node.func, 'id', '') == 'print' for node in ast.walk(tree)):
             issues.append("⚠️ Found `print()` - Use logging in production.")
 
-        # Check for broad exceptions
+        # Check for bare `except:` blocks
         for node in ast.walk(tree):
             if isinstance(node, ast.ExceptHandler) and node.type is None:
-                issues.append("⚠️ Found bare `except:` - Specify exception types.")
+                issues.append("⚠️ Found bare `except:` - Always specify exception types.")
 
-        # 3. Return results
-        if issues:
-            return "Found issues:\n" + "\n".join(issues)
-        return "✅ No syntax errors found. Code looks good!"
-    
+        return "✅ No critical issues found." if not issues else "Found issues:\n" + "\n".join(issues)
+
     except SyntaxError as e:
         return f"❌ Syntax Error: {e.msg} (Line {e.lineno})"
 
-# Initialize LLM (Groq or Gemini)
+# ===== Initialize Gemini LLM (via CrewAI) =====
 llm = LLM(
     api_key=GEMINI_API_KEY,
-    model="gemini/gemini-2.5-flash"  # Must include provider prefix
+    model="gemini/gemini-2.5-flash"
 )
-# ===== Agents =====
+
+# ===== Define CrewAI Agents =====
 code_analyzer = Agent(
     role="Python Static Analyzer",
-    goal="Find issues in Python code WITHOUT executing it",
-    backstory="Expert in static code analysis using AST parsing.",
+    goal="Identify issues in Python code using AST",
+    backstory="AST parsing expert, doesn't run the code but finds all the bad patterns.",
     llm=llm,
     verbose=True
 )
 
 code_corrector = Agent(
     role="Python Code Fixer",
-    goal="Fix issues while keeping original functionality",
-    backstory="Specializes in clean, PEP 8 compliant fixes.",
+    goal="Suggest PEP8-compliant fixes to code issues",
+    backstory="Professional Python developer focused on static code improvement.",
     llm=llm,
     verbose=True
 )
 
 manager = Agent(
-    role="Code Review Manager",
-    goal="Ensure smooth analysis & correction",
-    backstory="Coordinates the review process.",
+    role="Review Manager",
+    goal="Oversee analysis and correction",
+    backstory="Handles communication and coordinates the task flow.",
     llm=llm,
     verbose=True
 )
 
 # ===== Streamlit UI =====
-st.title("🔍 Python Code Reviewer (No ONNX)")
-code_input = st.text_area("Paste Python code:", height=300)
+st.set_page_config(page_title="Python Code Debugger", layout="centered")
+st.title("🔍 Automated Code Debugging Assistant (No ONNX)")
+st.markdown("Paste your Python code, and let the agents review & fix it without executing anything.")
+
+code_input = st.text_area("✍️ Paste Python Code:", height=300)
 
 if st.button("Analyze & Fix"):
     if not code_input.strip():
-        st.warning("Please enter Python code.")
+        st.warning("⚠️ Please paste some code before analyzing.")
     else:
-        with st.spinner("Analyzing..."):
-            # Task 1: Static Analysis
+        with st.spinner("🔎 Running static analysis and corrections..."):
+            # AST Analysis
+            static_analysis_result = analyze_python_code(code_input)
+
+            # Task 1: Analyze Code
             analysis_task = Task(
-                description=f"Analyze this code:\n```python\n{code_input}\n```",
+                description=f"Perform a code review on the following snippet and return clear issues:\n```python\n{code_input}\n```",
                 agent=code_analyzer,
-                expected_output="List of static analysis issues."
+                expected_output="List of issues found using static analysis."
             )
 
-            # Task 2: Fix Code
+            # Task 2: Fix the issues found
             correction_task = Task(
-                description="Fix all issues found.",
+                description="Correct the code based on the issues from the analyzer. Retain original logic. Fix only what’s flagged.",
                 agent=code_corrector,
-                expected_output="Corrected Python code with explanations.",
+                expected_output="Fixed code with comments on each change.",
                 context=[analysis_task]
             )
 
-            # Run CrewAI
+            # Define the Crew
             crew = Crew(
                 agents=[code_analyzer, code_corrector, manager],
                 tasks=[analysis_task, correction_task],
-                verbose=True,
-                process=Process.sequential
+                process=Process.sequential,
+                verbose=True
             )
-            
+
+            # Run the Crew
             result = crew.kickoff()
-            
-            # Display Results
-            st.subheader("🔧 Fixed Code")
-            st.code(result, language="python")
+
+        # ===== Display Results =====
+        st.subheader("🧠 Static AST Analysis")
+        st.markdown(f"```\n{static_analysis_result}\n```")
+
+        st.subheader("✅ Fixed Code (by Agents)")
+        st.code(result, language="python")
+
+        st.success("✅ Review completed!")
