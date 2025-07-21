@@ -1,82 +1,141 @@
-# 🤖 Agentic Math & Knowledge Assistant
 
-A Python agent that combines Google Gemini LLM with custom mathematical tools for interactive Q&A. The agent can answer general knowledge questions and perform math calculations using addition, subtraction, multiplication, and division tools.
+# 🚛 Logistics Optimization Crew AI System
 
----
+A two-agent AI system built using **LangChain CrewAI** and **Streamlit**, designed to analyze logistics inefficiencies and generate actionable optimization strategies for delivery routes or inventory management.
 
-## Features
-
-- **Conversational agent** powered by Gemini 1.5 Flash (via LangChain)
-- **Custom math tools**: addition, subtraction, multiplication, division (with zero-division handling)
-- **Agent chooses when to use tools** for math, or answers directly for general knowledge
-- **Interactive command-line chat interface**
-- **Agent state and workflow managed by LangGraph**
+> ⚙️ Powered by Google Gemini Pro via LangChain
+> 🧠 Agents: `Logistics Analyst`, `Optimization Strategist`
+> 📦 Focus: Route Efficiency • Inventory Turnover • Logistics Optimization
 
 ---
 
-## Setup
+## 📌 Project Overview
 
-1. **Clone the repository**
+This application simulates a realistic Crew AI environment with specialized agents to:
 
-   ```bash
-   git clone <your-repo-url>
-   cd Assesments/Create_an_Agent_Using_LLM_and_Custom_Mathematical_Functions
-   ```
+* **Analyze logistics operations**
+* **Detect inefficiencies in routes or inventory**
+* **Generate optimization strategies based on product input**
 
-2. **Install dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Set up your Gemini API key**
-
-   - Create a `.env` file in the project root:
-     ```
-     GOOGLE_API_KEY=your_gemini_api_key
-     ```
-   - Get your key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-
-4. **Run the agent**
-
-   ```bash
-   python app.py
-   ```
+The system is interactive and runs via a modern Streamlit interface.
 
 ---
 
-## Usage
+## 🧠 AI Agent Roles
 
-- Type your question or math problem at the prompt.
-- The agent will respond, using tools for math when needed.
-- Type `exit` or `quit` to end the session.
+### 🧾 Logistics Analyst
 
-**Examples:**
+* **Role:** Researches inefficiencies in logistics for the given products
+* **Backstory:** A senior logistics specialist skilled in operations, delays, and supply chain metrics
+
+### 🧠 Optimization Strategist
+
+* **Role:** Creates a data-driven optimization plan using insights from the analyst
+* **Backstory:** An expert in AI-based supply chain optimization and route planning
+
+---
+
+## 📺 User Interface
+
+Built with **Streamlit**, the UI allows:
+
+* Inputting a comma-separated product list
+* Triggering Crew AI execution
+* Viewing final strategy & agent output in real time
+
+![Streamlit UI Demo - Logistics Crew AI](https://dummyimage.com/800x400/cccccc/000000\&text=Streamlit+Logistics+AI+UI+Demo)
+
+---
+
+## 🚀 How It Works
+
+1. **Input Products:** Enter a list of products or delivery areas
+2. **Kickoff Agents:** The Logistics Analyst performs analysis
+3. **Strategize:** The Optimization Strategist generates the plan
+4. **Result:** A structured optimization strategy is displayed
+
+---
+
+## 🛠️ Setup Instructions
+
+### 1. Clone this repository
+
+```bash
+git clone https://github.com/your-username/logistics-crew-ai.git
+cd logistics-crew-ai
 ```
-You: What is the capital of France?
-Agent: The capital of France is Paris.
 
-You: What is 12.5 * 8.2?
-Agent: The result of multiplying 12.5 by 8.2 is 102.5.
+### 2. Install dependencies
+
+Create a virtual environment and install:
+
+```bash
+pip install -r requirements.txt
+```
+
+> ✅ Requires Python 3.9+
+
+### 3. Set up your `.env`
+
+Create a `.env` file with your [Google Gemini API Key](https://makersuite.google.com/app):
+
+```
+GOOGLE_API_KEY=your_gemini_api_key
 ```
 
 ---
 
-## Security
+## 📦 `requirements.txt`
 
-- **Never share your `.env` file or API key publicly.**
-- The `.gitignore` file excludes `.env` and virtual environments.
+```
+streamlit
+python-dotenv
+langchain
+langchain-google-genai
+crewai
+```
 
 ---
 
-## License
+## 🖥️ Run the App
 
-MIT License
+```bash
+streamlit run app.py
+```
+
+Open the URL in your browser (usually `http://localhost:8501`)
 
 ---
 
-## Credits
+## 🧪 Example Input
 
-- [LangChain](https://langchain.com/)
-- [LangGraph](https://github.com/langchain-ai/langgraph)
-- [Google Gemini](https://aistudio.google.com/)
+```
+Product A, Product B, Product C
+```
+
+## ✅ Sample Output
+
+```
+📦 Identified route inefficiencies for Product A and B in Zone 3
+🚛 Recommended dynamic routing with AI-based scheduling
+📈 Projected inventory turnover improved by 17%
+```
+
+---
+
+## 💡 Future Enhancements
+
+* PDF/CSV data ingestion for real logistics data
+* Export results to Excel/CSV
+* LangGraph pipeline for state tracing
+* Multi-agent dashboards
+* Cost estimation module
+
+---
+
+## 🧑‍💻 Author
+
+Built by \[ilanthalir]
+Powered by LangChain + Gemini Pro + CrewAI + Streamlit
+
+
