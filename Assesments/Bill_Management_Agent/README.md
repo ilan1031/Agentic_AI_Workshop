@@ -1,92 +1,143 @@
 # 🧾 AI Bill Management Agent
 
-A Streamlit app that uses Google Gemini Vision and AutoGen agents to extract, categorize, and summarize expenses from uploaded bill images. Upload a photo of your bill and let the AI handle expense categorization and trend analysis!
+An intelligent, AI-powered expense extraction and analysis app built with **Google Gemini Vision**, **AutoGen agents**, and **Streamlit**. Upload a bill image (JPG/PNG) and let the multi-agent system extract, categorize, and summarize your expenses for smarter budgeting and financial insights.
 
 ---
 
-## Features
+## 📌 Features
 
-- **Bill Image Analysis:**  
-  Upload a bill (JPG/PNG), and Gemini Vision extracts all expenses.
-- **Automatic Categorization:**  
-  Expenses are grouped into categories: Groceries, Dining, Utilities, Shopping, Entertainment, Others.
-- **Expense Summarization:**  
-  The AI summarizes total spending, category-wise totals, and highlights unusual spending patterns.
-- **Multi-Agent Workflow:**  
-  Uses AutoGen agents for bill processing and expense summarization, simulating a collaborative workflow.
-- **Interactive UI:**  
-  View categorized expenses, a natural language summary, and a chat log of agent interactions.
+* **🖼️ Bill Image Processing (OCR)**
+  Upload a photo or scanned copy of your bill. Gemini Vision will extract item names and costs.
 
----
+* **🧠 Automatic Categorization**
+  AI categorizes expenses into:
 
-## Installation
+  * Groceries
+  * Dining
+  * Utilities
+  * Shopping
+  * Entertainment
+  * Others
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd Assesments/Bill_Management_Agent
-   ```
+* **📊 Expense Summarization**
+  Summarizes:
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-   Your `requirements.txt` should include:
-   ```
-   streamlit
-   pillow
-   python-dotenv
-   google-generativeai
-   autogen
-   ```
+  * Total spending
+  * Category-wise expenditure
+  * Highlights highest or unusual spending categories
 
-3. **Set up your Gemini API key**
-   - Create a `.env` file in the project root:
-     ```
-     GEMINI_API_KEY=your_gemini_api_key
-     ```
-   - Get your key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+* **🤖 Multi-Agent AI (AutoGen)**
+  A team of collaborative agents simulates:
+
+  * `BillProcessingAgent`: Categorizes the bill
+  * `ExpenseSummarizationAgent`: Summarizes and analyzes trends
+
+* **🧵 Chat Logs**
+  See the agent interaction history for transparency and audit.
+
+* **🧑‍💻 Built with Streamlit**
+  Fast, responsive, and clean user interface for a smooth experience.
 
 ---
 
-## Usage
+## 🚀 Installation
 
-1. **Start the app**
-   ```bash
-   streamlit run app.py
-   ```
+### 1. Clone the Repository
 
-2. **In your browser:**
-   - Upload a bill image (JPG or PNG).
-   - Wait for the AI to extract and categorize expenses.
-   - View the categorized expenses, summary, and agent chat log.
+```bash
+git clone <your-repo-url>
+cd Assesments/Bill_Management_Agent
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Your `requirements.txt` should contain:
+
+```txt
+streamlit
+pillow
+python-dotenv
+google-generativeai
+autogen
+```
+
+### 3. Set up Google Gemini API Key
+
+> 📌 Sign up at [Google AI Studio](https://makersuite.google.com/app) to get your Gemini API key.
+
+Create a `.env` file in the project root:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+```
 
 ---
 
-## How It Works
+## ▶️ Usage
 
-- The app loads your Gemini API key and initializes the Gemini Vision model.
-- When you upload a bill image, the model extracts expenses and groups them by category.
-- AutoGen agents simulate a workflow: bill processing, categorization, and summarization.
-- The results and agent interactions are displayed in the Streamlit UI.
+Run the app with:
+
+```bash
+streamlit run app.py
+```
+
+### In your browser:
+
+1. Upload a **bill image** (JPG or PNG).
+2. Wait for the AI to:
+
+   * Extract expenses
+   * Categorize them
+   * Summarize and analyze spending trends
+3. View:
+
+   * **Categorized Expenses**
+   * **Markdown-formatted Financial Summary**
+   * **Agent Conversation Logs**
 
 ---
 
-## Security
+## 🧠 How It Works
 
-- **Never share your `.env` or API key publicly.**
-- `.env` and virtual environments should be excluded in `.gitignore`.
+1. **Gemini Vision**:
+
+   * Receives the uploaded bill image
+   * Extracts item names and prices
+   * Groups them into predefined categories
+
+2. **AutoGen Agents**:
+
+   * `UserProxyAgent`: Orchestrates communication
+   * `BillProcessingAgent`: Processes and validates categories
+   * `ExpenseSummarizationAgent`: Analyzes and summarizes expense trends
+
+3. **Streamlit Frontend**:
+
+   * Displays categorized data, summary, and chat history
 
 ---
 
-## License
+## 🔐 Security
+
+* Never hardcode your API key.
+* Store it in a `.env` file (excluded in `.gitignore`).
+* Never upload your `.env` or environment files to public repos.
+
+---
+
+## 📄 License
 
 MIT License
 
 ---
 
-## Credits
+## 🙌 Credits
 
-- [Google Gemini](https://aistudio.google.com/)
-- [Microsoft AutoGen](https://github.com/microsoft/autogen)
-- [Streamlit](https://streamlit.io/)
+* **Google Gemini** – OCR and LLM processing
+* **AutoGen by Microsoft** – Multi-agent conversation framework
+* **Streamlit** – UI/UX for quick web app development
+

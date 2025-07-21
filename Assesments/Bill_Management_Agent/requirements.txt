@@ -1,5 +1,5 @@
 streamlit
+pillow
 python-dotenv
 google-generativeai
-pyautogen
 autogen
