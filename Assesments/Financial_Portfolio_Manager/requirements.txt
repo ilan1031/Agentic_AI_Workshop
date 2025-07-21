@@ -1,5 +1,4 @@
-autogen
 streamlit
+autogen
+google-generativeai
 python-dotenv
-google-genai
-vertexai
