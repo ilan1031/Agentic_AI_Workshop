@@ -1,111 +1,149 @@
-# 🧠 Multi-Agent Research and Summarization Assistant
 
-This project is a fully agentic research assistant built with Streamlit, LangChain, LangGraph, and Google Gemini. It can answer questions by searching the web, retrieving from your own documents, or using the Gemini LLM—then summarizes the results for you.
+### 🧠 Multi-Agent Research and Summarization Assistant
 
----
-
-## Features
-
-- **Multi-Agent Pipeline:**  
-  Routes your query to the best agent: Web Search, Retrieval-Augmented Generation (RAG), or LLM.
-- **Document Support:**  
-  Upload PDFs, DOCX, or TXT files to the `rag` folder for custom knowledge retrieval.
-- **Web Search Integration:**  
-  Uses DuckDuckGo for real-time web answers.
-- **Gemini LLM:**  
-  Uses Google Gemini 1.5 Flash for reasoning and summarization.
-- **Automatic Summarization:**  
-  All answers are summarized for clarity.
-- **Streamlit UI:**  
-  Simple web interface for asking questions and viewing answers.
+A fully agentic app that intelligently routes your question to web search, your uploaded documents, or direct LLM reasoning—then summarizes the answer for clarity.
 
 ---
 
-## How the Code Works
+## 🚀 Features
 
-1. **Configuration & LLM Setup**
-   - Loads your Google Gemini API key from `.env`.
-   - Initializes Gemini LLM and embedding model.
+* ✅ **Multi-Agent Pipeline** (LangGraph)
 
-2. **File Parsing**
-   - Reads all `.pdf`, `.docx`, and `.txt` files in the `rag` folder.
-   - Splits documents into chunks and creates a FAISS vector store for retrieval.
+  * Router → Web Search / RAG / LLM → Summarizer
+* 📄 **Document Uploads**
 
-3. **Agents**
-   - **Router Agent:** Decides if the query should go to Web Search, RAG, or LLM.
-   - **Web Agent:** Uses DuckDuckGo to answer.
-   - **RAG Agent:** Retrieves from your documents and answers using Gemini.
-   - **LLM Agent:** Answers directly using Gemini.
-   - **Summarizer Agent:** Summarizes the answer.
+  * Supports `.pdf`, `.docx`, and `.txt` in `rag/` folder
+* 🔎 **Web Search Agent**
 
-4. **LangGraph Workflow**
-   - Orchestrates the flow: Router → (Web/RAG/LLM) → Summarizer.
+  * Uses DuckDuckGo for real-time data
+* 🤖 **LLM Agent**
 
-5. **Streamlit App**
-   - Loads documents (if any).
-   - Accepts user questions.
-   - Runs the agentic workflow and displays the summarized answer.
+  * Gemini 1.5 Flash for direct answers & summaries
+* 📘 **RAG Agent**
 
----
+  * Vector-based retrieval using FAISS from your files
+* 💬 **Summarizer Agent**
 
-## Installation
+  * AI summarization of all final outputs
+* 🌐 **Streamlit UI**
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd Assesments/Multi_Agent_Research_and_Summarization
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-   *If you see errors about missing packages, also run:*
-   ```bash
-   pip install streamlit langchain langgraph pdfplumber python-docx faiss-cpu google-generativeai duckduckgo-search python-dotenv
-   ```
-
-3. **Set up your Google Gemini API key**
-   - Create a `.env` file in the project root:
-     ```
-     GOOGLE_API_KEY=your_gemini_api_key
-     ```
-   - Get your key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-
-4. **(Optional) Add your documents**
-   - Place `.pdf`, `.docx`, or `.txt` files in a folder named `rag` in the project directory.
+  * Clean, user-friendly question box with real-time results
 
 ---
 
-## Running the App
+## 🛠 How It Works
+
+### 🧠 Agents
+
+| Agent            | Role                                                     |
+| ---------------- | -------------------------------------------------------- |
+| Router Agent     | Determines whether to use Web Search, RAG, or direct LLM |
+| Web Agent        | Searches the web using DuckDuckGo                        |
+| RAG Agent        | Retrieves from local documents using FAISS + embeddings  |
+| LLM Agent        | Directly queries Gemini LLM                              |
+| Summarizer Agent | Summarizes the output for clarity and conciseness        |
+
+---
+
+## 📂 Folder Structure
+
+```
+multi-agent-research/
+├── app.py              # Streamlit app + LangGraph logic
+├── rag/                # Place PDFs, DOCX, TXT files here
+├── .env                # API key config
+├── requirements.txt    # Python dependencies
+└── README.md           # Project documentation
+```
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the Repo
+
+```bash
+git clone https://github.com/yourusername/multi-agent-research.git
+cd multi-agent-research
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+If needed, install manually:
+
+```bash
+pip install streamlit langchain langgraph pdfplumber python-docx faiss-cpu \
+    google-generativeai duckduckgo-search python-dotenv
+```
+
+### 3. Add API Key
+
+Create a `.env` file:
+
+```env
+GOOGLE_API_KEY=your_gemini_api_key
+```
+
+Get your key from [Google AI Studio](https://makersuite.google.com/app)
+
+---
+
+## 📄 Add Your Documents
+
+Place your custom knowledge files into the `rag/` folder. Supported formats:
+
+* `.pdf`
+* `.docx`
+* `.txt`
+
+These will be automatically parsed and embedded into a vector store.
+
+---
+
+## ▶️ Run the App
 
 ```bash
 streamlit run app.py
 ```
 
-- Open the provided local URL in your browser.
-- Enter your question and click **Submit**.
-- The app will display a summarized answer, using web search, your documents, or Gemini as appropriate.
+Then open the local URL (usually `http://localhost:8501`).
 
 ---
 
-## Notes
+## 🧪 Example Queries
 
-- If no documents are found, the app uses a small fallback knowledge base.
-- Make sure your `.env` file is **not** committed to GitHub for security.
-- The app is modular and easy to extend with more agents or tools.
-
----
-
-## License
-
-MIT License
+* "What is LangGraph?"
+* "Summarize my training manuals."
+* "Give updates on generative AI from the web."
+* "Explain warehouse optimization based on my documents."
 
 ---
 
-## Credits
+## 🔐 Notes
 
-- [LangChain](https://langchain.com/)
-- [LangGraph](https://github.com/langchain-ai/langgraph)
-- [Google Gemini](https://aistudio.google.com/)
--
+* All document embeddings are stored in-memory via FAISS
+* Summarization uses Gemini for all agent output
+* Make sure your `.env` is excluded from Git (`.gitignore`)
+* Works fully offline if no web search is needed
+
+---
+
+## 📃 License
+
+MIT License — Free to use and extend.
+
+---
+
+## 🙌 Credits
+
+* [LangChain](https://www.langchain.com/)
+* [LangGraph](https://github.com/langchain-ai/langgraph)
+* [Google Gemini](https://ai.google.dev/)
+* [DuckDuckGo Search API](https://duckduckgo.com/)
+* [Streamlit](https://streamlit.io/)
+
+---
