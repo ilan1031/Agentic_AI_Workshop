@@ -1,96 +1,59 @@
-# 📝 Smart Content Creation: Agentic AI Content Refinement
+# 🧠 Smart Competitor Insights AI
 
-This Streamlit app simulates a conversation between two AI agents—a Content Creator and a Content Critic—powered by Google Gemini and AutoGen. The Creator drafts and revises technical content, while the Critic provides structured feedback, resulting in high-quality, markdown-formatted educational material.
+This AI assistant helps you generate reports on nearby clothing store competitors based on footfall, popularity, and busiest hours.
 
----
+## 🔍 Features
 
-## Features
+- Ask questions like:
+  - "What are the busiest clothing stores in Koramangala?"
+  - "When is the peak time for customer visits in MG Road stores?"
+- Gets real-time data using Tavily Search
+- Powered by Gemini 1.5 Flash and LangChain + LangGraph
+- Stunning UI with Streamlit
 
-- **Agentic Collaboration:**  
-  - Content Creator Agent: Drafts and revises technical content on a chosen topic.
-  - Content Critic Agent: Evaluates content for technical accuracy, clarity, and depth, and suggests improvements.
-- **LLM-Powered:**  
-  Uses Google Gemini 1.5 Flash for all content generation and critique.
-- **Interactive UI:**  
-  Choose your topic and number of conversation turns, then watch the agents refine the content in real time.
-- **Markdown Output:**  
-  All content is structured in markdown for easy reuse.
+## 🛠️ Setup
 
----
+1. **Clone the repo**
+```bash
+git clone <your-repo-url>
+cd smart_competitor_ai
+Install dependencies
 
-## Installation
+bash
+Copy
+Edit
+pip install -r requirements.txt
+Add your Gemini API Key
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd Assesments/Smart_Content_Creation
-   ```
+Create a .env file in the root directory:
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-   Make sure your `requirements.txt` includes:
-   ```
-   streamlit
-   google-generativeai
-   autogen
-   langchain-google-genai
-   python-dotenv
-   ```
+bash
+Copy
+Edit
+GEMINI_API_KEY=your-google-api-key
+Run the app
 
-3. **Set up your Gemini API key**
-   - Create a `.env` file in the project root:
-     ```
-     GEMINI_API_KEY=your_gemini_api_key
-     ```
-   - Get your key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+bash
+Copy
+Edit
+streamlit run app.py
+App runs at: http://localhost:8501
 
----
+🤖 How It Works
+Uses LangChain tools to:
 
-## Usage
+Search competitor stores and footfall using Tavily
 
-1. **Start the app**
-   ```bash
-   streamlit run app.py
-   ```
+Invoke Gemini 1.5 Flash for insights and report generation
 
-2. **In your browser:**
-   - Enter a discussion topic (e.g., "Agentic AI").
-   - Select the number of conversation turns.
-   - Click **Start Simulation** to watch the agents collaborate and refine the content.
+LangGraph used for orchestration of tool calls
 
-3. **Review the results:**
-   - The final, refined content is shown at the end.
-   - Expandable sections show the full conversation trace between the Creator and Critic agents.
+Clean one-click UI built with Streamlit
 
----
+🔐 Security
+Never share your .env file publicly
 
-## How It Works
+.gitignore should include .env, __pycache__/, .DS_Store
 
-- The app uses two agent classes (Creator and Critic), each with a system prompt and access to Gemini via LangChain.
-- On each turn, the Creator generates or revises content, and the Critic provides feedback.
-- The process repeats for the selected number of turns, simulating iterative content refinement.
-- All interactions and outputs are displayed in the Streamlit interface.
-
----
-
-## Security
-
-- **Never share your `.env` or API key publicly.**
-- The `.gitignore` file should exclude `.env` and virtual environments.
-
----
-
-## License
-
-MIT License
-
----
-
-## Credits
-
-- [Google Gemini](https://aistudio.google.com/)
-- [Microsoft AutoGen](https://github.com/microsoft/autogen)
-- [LangChain](https://langchain.com/)
-- [Streamlit](https://streamlit.io/)
+📎 Sample Query
+"What are the peak hours for clothing stores in Koramangala?"
