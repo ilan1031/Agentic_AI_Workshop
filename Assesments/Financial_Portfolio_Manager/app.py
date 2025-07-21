@@ -2,43 +2,44 @@ import streamlit as st
 import json
 import autogen
 from autogen import AssistantAgent, UserProxyAgent
-
-
 import os
 from dotenv import load_dotenv
 
+# Load API key securely
 load_dotenv()
 api_key = os.getenv('GOOGLE_API_KEY')  
 if not api_key:
-    raise ValueError("Gemini API key missing!")
+    st.error("❌ Gemini API key missing in .env!")
+    st.stop()
 
-
+# Gemini configuration
 config_list_gemini = [{
     "model": "gemini-2.5-flash",
     "api_key": api_key,
     "api_type": "google"
 }]
 
-
+st.set_page_config(page_title="💼 Financial Portfolio Manager", layout="centered")
 st.title("💼 Financial Portfolio Manager")
-st.markdown("AI-powered personalized investment report")
+st.markdown("AI-powered multi-agent system that generates a **personalized investment report**.")
 
+# --- Financial Input Form ---
 with st.form("financial_form"):
     salary = st.text_input("Annual Salary (₹)", placeholder="1200000")
     age = st.number_input("Your Age", min_value=18, max_value=100, step=1)
     expenses = st.text_input("Annual Expenses (₹)", placeholder="500000")
-    goals = st.text_area("Financial Goals", placeholder="Retirement in 20 years, buying a home in 5 years")
-    risk = st.selectbox("Risk Tolerance", ["Conservative", "Moderate", "Aggressive"])
+    goals = st.text_area("🎯 Financial Goals", placeholder="Retirement in 20 years, buying a home in 5 years")
+    risk = st.selectbox("📉 Risk Tolerance", ["Conservative", "Moderate", "Aggressive"])
 
-    st.subheader("🪙 Portfolio Details")
-    mutual_funds = st.text_area("Mutual Funds (Name + Type + Amount)", placeholder="Axis Bluechip - Equity - ₹2L")
-    stocks = st.text_area("Stocks (Name + Qty + Buy Price)", placeholder="Infosys - 10 shares - ₹1500")
-    real_estate = st.text_area("Real Estate (Type + Location + Value)", placeholder="Residential Apartment - Mumbai - ₹10L")
-    fixed_deposit = st.text_input("Fixed Deposit (Total ₹)", placeholder="500000")
+    st.subheader("📦 Portfolio Details")
+    mutual_funds = st.text_area("📈 Mutual Funds", placeholder="Axis Bluechip - Equity - ₹2L")
+    stocks = st.text_area("📊 Stocks", placeholder="Infosys - 10 shares - ₹1500")
+    real_estate = st.text_area("🏠 Real Estate", placeholder="Residential Apartment - Mumbai - ₹10L")
+    fixed_deposit = st.text_input("🏦 Fixed Deposit (Total ₹)", placeholder="500000")
 
-    submit = st.form_submit_button("Generate Report")
+    submit = st.form_submit_button("🧠 Generate Report")
 
-
+# --- Agents ---
 portfolio_analyst = AssistantAgent(
     name="PortfolioAnalyst",
     llm_config={"config_list": config_list_gemini},
@@ -95,7 +96,6 @@ def extract_strategy(content):
     except:
         return "Growth"
 
-
 def manage_investment_portfolio():
     message = f"""
 User Profile:
@@ -113,29 +113,17 @@ Current Portfolio:
 """
 
     # Step 1: Portfolio Analysis
-    analysis_result = user_proxy.initiate_chat(
-        portfolio_analyst,
-        message=message,
-        summary_method="last_msg",
-        silent=True
-    )
+    analysis_result = user_proxy.initiate_chat(portfolio_analyst, message=message, summary_method="last_msg", silent=True)
     analysis_summary = analysis_result.chat_history[-1]["content"]
     strategy = extract_strategy(analysis_summary)
 
-    # Step 2: Get Recommendations
+    # Step 2: Strategy Recommendations
     agent = growth_strategist if strategy == "Growth" else value_strategist
-    recommendations_result = user_proxy.initiate_chat(
-        agent,
-        message=f"{message}\nStrategy: {strategy}",
-        summary_method="last_msg",
-        silent=True
-    )
+    recommendations_result = user_proxy.initiate_chat(agent, message=message + f"\nStrategy: {strategy}", summary_method="last_msg", silent=True)
     recommendations_summary = recommendations_result.chat_history[-1]["content"]
 
-    # Step 3: Generate Final Report
-    report_result = user_proxy.initiate_chat(
-        financial_advisor,
-        message=f"""
+    # Step 3: Final Report
+    report_result = user_proxy.initiate_chat(financial_advisor, message=f"""
 Generate a comprehensive financial report based on:
 
 User Profile:
@@ -147,30 +135,25 @@ Portfolio Analysis:
 Investment Recommendations:
 {recommendations_summary}
 
-Include these sections:
+Include:
 1. Portfolio Analysis Summary
 2. Recommended Strategy
-3. Specific Investment Recommendations
+3. Investment Suggestions
 4. Implementation Plan
 5. Risk Assessment
-""",
-        summary_method="last_msg",
-        silent=True
-    )
+""", summary_method="last_msg", silent=True)
 
-    # Extract the actual report content
     report_content = report_result.chat_history[-1]["content"]
-    if "TERMINATE" in report_content:
-        return report_content.split("TERMINATE")[0].strip()
-    return report_content
+    return report_content.split("TERMINATE")[0].strip() if "TERMINATE" in report_content else report_content
 
-# ⏳ Generate and Display
+# 🧾 UI Result Output
 if submit:
-    with st.spinner("🧠 Analyzing your portfolio... This may take 1-2 minutes"):
+    with st.spinner("🧠 Analyzing your financial data..."):
         try:
             result = manage_investment_portfolio()
             st.subheader("📊 Your Personalized Financial Report")
-            st.markdown(result)
+            st.markdown(result, unsafe_allow_html=True)
+            st.download_button("📥 Download Report", data=result, file_name="financial_report.md", mime="text/markdown")
         except Exception as e:
-            st.error(f"Error generating report: {str(e)}")
-            st.info("Please check your inputs and try again. If the problem persists, try reducing the amount of text in your inputs.")
+            st.error(f"🚫 Error: {str(e)}")
+            st.info("Please review your inputs or retry with simpler values.")
