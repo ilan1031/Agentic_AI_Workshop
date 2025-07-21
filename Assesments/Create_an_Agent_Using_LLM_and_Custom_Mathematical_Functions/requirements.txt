@@ -1,7 +1,5 @@
-langchain
-langgraph
-langchain-google-genai
-google-generativeai
-typing-extensions
+streamlit
 python-dotenv
-pyautogen 
+langchain
+langchain-google-genai
+crewai
