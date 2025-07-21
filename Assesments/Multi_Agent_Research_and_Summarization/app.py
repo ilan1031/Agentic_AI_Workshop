@@ -2,6 +2,7 @@ import os
 import streamlit as st
 import pdfplumber
 from docx import Document as DocxDocument
+from dotenv import load_dotenv
 
 from langchain_community.vectorstores import FAISS
 from langchain.docstore.document import Document
@@ -10,17 +11,17 @@ from langchain.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langgraph.graph import StateGraph
 from langchain_core.runnables import RunnableLambda
-
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_community.tools import DuckDuckGoSearchRun
-from dotenv import load_dotenv
+
+# ---------------------- LOAD ENV ----------------------
 load_dotenv()
-# ---------------------- CONFIGURATION ----------------------
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 if not GOOGLE_API_KEY:
-    raise ValueError("GOOGLE_API_KEY not found in environment variables")
+    raise ValueError("GOOGLE_API_KEY not found in .env")
 
+# ---------------------- LLM + EMBEDDING ----------------------
 llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3)
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
@@ -79,7 +80,7 @@ def summarizer_agent(state):
     summary = (prompt | llm).invoke({"content": content}).content
     return {**state, "final": summary}
 
-# ---------------------- LANGGRAPH ----------------------
+# ---------------------- LANGGRAPH FLOW ----------------------
 def run_langgraph(user_query, retriever):
     workflow = StateGraph(dict)
     workflow.set_entry_point("router")
@@ -105,13 +106,14 @@ def run_langgraph(user_query, retriever):
     return app.invoke({"query": user_query, "retriever": retriever})["final"]
 
 # ---------------------- STREAMLIT APP ----------------------
-st.set_page_config(page_title="🔍 Fully Agentic Research Assistant", layout="centered")
-st.title("🧠 Multi-Agent RAG System (LangGraph + Web + RAG + LLM)")
+st.set_page_config(page_title="🧠 Multi-Agent Research Assistant", layout="centered")
+st.title("🧠 Multi-Agent Research & Summarization Assistant")
+st.caption("Built with LangGraph, Gemini, DuckDuckGo, and RAG 📚")
 
 retriever = None
 documents_loaded = False
 
-# Load local documents
+# Load local documents if available
 if os.path.exists("rag"):
     with st.spinner("📂 Loading documents from 'rag' folder..."):
         all_content = []
@@ -129,29 +131,29 @@ if os.path.exists("rag"):
             documents_loaded = True
             st.success(f"✅ Loaded {len(all_content)} documents.")
         else:
-            st.warning("⚠️ No readable files found.")
+            st.warning("⚠️ No readable documents found.")
 
 if not documents_loaded:
     st.info("📄 Using fallback knowledge base.")
     docs = [
-        Document(page_content="LangGraph is a Python framework for agent workflows."),
-        Document(page_content="Gemini 1.5 Flash is fast and great for summarization."),
+        Document(page_content="LangGraph is a Python framework for building agent workflows."),
+        Document(page_content="Google Gemini 1.5 Flash is fast and effective for summarization."),
     ]
     vectorstore = FAISS.from_documents(docs, embeddings)
     retriever = vectorstore.as_retriever()
 
-# User Input
-query = st.text_input("💬 Ask your question", placeholder="e.g. What is LangGraph?")
+# ---------------------- USER INPUT ----------------------
+query = st.text_input("💬 Ask a question", placeholder="e.g. What is LangGraph?")
 submit = st.button("Submit")
 
 if submit:
     if not query.strip():
-        st.warning("⚠️ Please enter a question.")
+        st.warning("⚠️ Please enter a valid question.")
     else:
-        with st.spinner("🤖 Thinking..."):
+        with st.spinner("🤖 Processing..."):
             try:
                 answer = run_langgraph(query, retriever)
-                st.success("✅ Done!")
+                st.success("✅ Answer ready!")
                 st.subheader("📘 Answer:")
                 st.write(answer)
             except Exception as e:
