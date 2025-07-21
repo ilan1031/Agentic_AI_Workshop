@@ -1,90 +1,58 @@
 # 🤖 Smart Health Assistant
 
-A multi-agent Streamlit app that generates a personalized health plan—including BMI calculation, health recommendations, meal plans, and workout schedules—using Google Gemini 1.5 Flash and Microsoft AutoGen.
+An intelligent multi-agent assistant that creates a **personalized health plan** including:
+- ✅ BMI analysis and health recommendations
+- 🥗 Meal plans tailored to your dietary preferences
+- 🏋️ Workout schedules based on your age, gender, and BMI
+
+All powered by **Google Gemini 1.5 Flash** and **Microsoft AutoGen** with a slick **Streamlit UI**.
 
 ---
 
-## Features
+## 🌟 Features
 
-- **Conversational Multi-Agent System:**  
-  - **BMI Agent:** Calculates BMI, categorizes it, and provides health advice.
-  - **Diet Planner Agent:** Creates meal plans tailored to your BMI and dietary preference.
-  - **Workout Scheduler Agent:** Designs a weekly workout plan based on your age, gender, and meal plan.
-  - **User Proxy Agent:** Shares your health data with other agents and coordinates the workflow.
-- **Gemini LLM Powered:**  
-  Uses Google Gemini 1.5 Flash for all reasoning and content generation.
-- **Interactive Streamlit UI:**  
-  Enter your details, generate your plan, and download the results.
-- **Secure:**  
-  API key is entered via the sidebar and never stored.
+- **Conversational Multi-Agent System** (AutoGen):
+  - `BMI Agent`: Calculates BMI and gives personalized health advice.
+  - `Diet Planner`: Crafts meal plans based on BMI and user preferences.
+  - `Workout Scheduler`: Generates a 7-day workout schedule.
+  - `User Proxy`: Orchestrates all agents and user data.
+- **Streamlit UI** for easy use and results download.
+- **Gemini 1.5 Flash** for fast, free LLM reasoning.
 
 ---
 
-## Installation
+## 🛠️ Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd Assesments/Smart_Health_Assistant
-   ```
+### 1. Install dependencies
+```bash
+pip install -r requirements.txt
+2. Get Your Gemini API Key
+Go to Google AI Studio
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-   Your `requirements.txt` should include:
-   ```
-   streamlit
-   google-generativeai
-   autogen
-   python-dotenv
-   ```
+Copy your key.
 
-3. **Get your Gemini API key**
-   - Visit [Google AI Studio](https://aistudio.google.com/app/apikey) to generate your key.
+3. Run the app
+bash
+Copy
+Edit
+streamlit run app.py
+🧪 How It Works
+User enters basic health data and preferences.
 
----
+UserProxyAgent sends the input to all agents.
 
-## Usage
+Each agent performs its task:
 
-1. **Start the app**
-   ```bash
-   streamlit run app.py
-   ```
+BMI_Agent → BMI + health suggestions.
 
-2. **In your browser:**
-   - Enter your Gemini API key in the sidebar.
-   - Fill in your weight, height, age, gender, and dietary preference.
-   - Click **Generate Health Plan**.
-   - View the agent conversation and download your personalized plan.
+Diet_Planner → Meal plan generation.
 
----
+Workout_Scheduler → Weekly workout based on diet and BMI.
 
-## How It Works
+Results are displayed and downloadable in the UI.
 
-- The app collects your health data and preferences.
-- Agents collaborate (using AutoGen) to:
-  1. Calculate and analyze your BMI.
-  2. Generate a meal plan.
-  3. Create a workout schedule.
-- All steps and results are shown in the UI, with the final plan available for download.
+🔐 Security
+API keys are entered securely in the UI.
 
----
+.env and cache files should be excluded via .gitignore.
 
-## Security
-
-- **Never share your API key publicly.**
-- `.env` and virtual environments should be excluded in `.gitignore`.
-
----
-
-## License
-
-MIT License
-
----
-
-## Credits
-
-- [Google Gemini](https://aistudio.google.com/)
-- [Microsoft AutoGen](https://github.com/microsoft/autogen)
