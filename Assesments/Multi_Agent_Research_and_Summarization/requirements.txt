@@ -1,11 +1,24 @@
-streamlit
-langchain>=0.2.0
-langgraph>=0.0.30
-langchain-google-genai
-langchain-community
+# Core LLM + LangChain Framework
+langchain
+langgraph
+
+# Google Gemini API
 google-generativeai
-faiss-cpu
+
+# Document Loaders
 pdfplumber
 python-docx
-tqdm
+
+# Vector Store
+faiss-cpu
+sentence-transformers
+
+# Search Tools
 duckduckgo-search
+
+# Streamlit UI
+streamlit
+
+# Utilities
+python-dotenv
+tqdm
